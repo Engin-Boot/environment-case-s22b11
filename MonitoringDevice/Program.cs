@@ -10,6 +10,7 @@ namespace MonitoringDevice
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Sample!");
         }
     }
 }
