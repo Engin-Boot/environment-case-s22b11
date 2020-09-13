@@ -10,17 +10,17 @@ namespace MonitoringDeviceTest
         public void WhenFileNotFoundThenShowError()
         {
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-            var x = obj.ReadingData();
-            Assert.True(x == 1);
+            int x = obj.ReadingData();
+            Assert.True(x.Equals(1));
         }
 
         [Fact]
         public void WhenTempratureValueMissingThenSkipTheValue()
         {
            MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-          
+                obj.ReadingData();
                 var x = obj.SendingData();
-                Assert.True(x == 0);
+                Assert.True(x == 1);
             
         }
         [Fact]

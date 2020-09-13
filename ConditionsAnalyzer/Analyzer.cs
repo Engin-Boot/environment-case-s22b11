@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace ConditionsAnalyzer
 {
@@ -17,7 +12,8 @@ namespace ConditionsAnalyzer
     }
     public class Analyzer
     {
-        IReporter reporter;
+        private static System.Timers.Timer aTimer;
+        static IReporter reporter;
         static float temperatureLowerWarning;
         static float temperatureHigherWarning;
         static float temperatureLowerError;
@@ -33,9 +29,9 @@ namespace ConditionsAnalyzer
             public float temperature;
             public float humidity;
         }
-        public Analyzer(IReporter reporter)
+        public Analyzer(IReporter reporterobj)
         {
-            this.reporter = reporter;
+            reporter = reporterobj;
             temperatureLowerWarning = 4;
             temperatureHigherWarning = 37;
             temperatureLowerError = 0;
@@ -86,18 +82,35 @@ namespace ConditionsAnalyzer
             string message = $"{ConditionName} condition is at {AlertType} level";
             return message;   
         }
+        private static void SetTimer()
+        {
+            
+            aTimer = new System.Timers.Timer(10000); 
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
 
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            //Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
+            //              e.SignalTime);
+            reporter.sendMessage("Sender has not sent data since 30 mins");
+        }
         public static void Main(string[] args)
         {
             SMSReporter reporter = new SMSReporter();
             Analyzer analyzer = new Analyzer(reporter);
             Conditions conditions = new Conditions();
             string line;
+            SetTimer();
             while ((line = Console.ReadLine()) != null)
             {
+                aTimer.Stop();
                 conditions = getConditions(line);
                 analyzer.Analyze(conditions.temperature,"Temperature",temperatureHigherWarning,temperatureLowerWarning,temperatureHigherError,temperatureLowerError);
                 analyzer.Analyze(conditions.humidity, "Humidity", humidityHigherWarning,humidityLowerWarning,humidityHigherError,humidityLowerError);
+                aTimer.Start();
             }
         }
     }

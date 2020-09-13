@@ -17,7 +17,7 @@ namespace MonitoringDevice
        
         public int ReadingData()
         {
-            buffer = System.IO.File.ReadAllLines("C:/Users/Aayush/Desktop/test.csv");
+            buffer = System.IO.File.ReadAllLines("C:\\Users\\Shweta Shinde\\Desktop\\TestingPrject\\test.csv");
             if (buffer.Length==0)
             {
                 Console.WriteLine("FILE IS EMPTY");
@@ -49,7 +49,7 @@ namespace MonitoringDevice
         {
 
             int flag = 1;
-            for(int i=1;i<buffer.Length;i++)
+            for(int i=1; i<buffer.Length; i++)
             {
                 
                 if ((buffer[i].Substring(0, 1)) == " ")
