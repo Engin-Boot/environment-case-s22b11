@@ -34,9 +34,10 @@ namespace MonitoringDeviceTest
         }
 
         [Fact]
-        public void WhenSenderDoesNotSendDataOnTimeThenThrowError()
+        public void WhenSenderDoesNotSendDataOnTimeThenShowMessage()
         {
 
         }
+       
     }
 }

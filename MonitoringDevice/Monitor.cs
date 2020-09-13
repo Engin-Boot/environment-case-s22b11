@@ -7,15 +7,31 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Markup;
+using System.Timers;
 
 namespace MonitoringDevice
 {
     
     public class MonitoringDevice
     {
+        private static System.Timers.Timer aTimer;
         public static string[] buffer;
         string[] temp;
-      
+
+        private static void SetTimer()
+        {
+
+            aTimer = new System.Timers.Timer(1500);
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Machine did not send the message on time");
+
+        }
         public int ReadingData(string filePath)
         {
             buffer = System.IO.File.ReadAllLines(filePath);
@@ -74,14 +90,19 @@ namespace MonitoringDevice
         {
             for(int i=1;i<buffer.Length;i++)
             {
-                Thread.Sleep(3000);
+                aTimer.Start();
+
+                Thread.Sleep(1000);
+
                 if(!(buffer[i].Contains(',')))
                 Console.WriteLine(buffer[i]);
+
+                aTimer.Stop();
             }
             
         }
 
-            
+        
 
         static void Main(string[] args)
         {
@@ -95,9 +116,9 @@ namespace MonitoringDevice
 
             if (x == 1)
             {
+                SetTimer();
                 obj.ProcessingData();
                 obj.SendingData();
-               
             }
         }
     }
