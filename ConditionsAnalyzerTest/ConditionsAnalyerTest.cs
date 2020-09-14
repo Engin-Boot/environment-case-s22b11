@@ -1,6 +1,8 @@
 using System;
 using Xunit;
 using ConditionsAnalyzer;
+using System.Threading;
+using System.Timers;
 
 namespace ConditionsAnalyzerTest
 {
@@ -49,6 +51,14 @@ namespace ConditionsAnalyzerTest
             Assert.True(TemperatureMessage.Equals("Temperature condition is at ERROR level"));
             Assert.True(HumidityMessage.Equals("Humidity condition is at ERROR level"));
         }
-        
+        public void WhenDataIsNotRecievedForNMinutes()
+        {
+            IReporter reporter = new SMSReporter();
+            Analyzer analyzer = new Analyzer(reporter);
+            
+
+        }
+
+       
     }
 }

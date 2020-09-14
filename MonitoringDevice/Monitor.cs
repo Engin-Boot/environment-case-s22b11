@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
+
 
 namespace MonitoringDevice
 {
@@ -17,7 +11,7 @@ namespace MonitoringDevice
        
         public int ReadingData()
         {
-            buffer = System.IO.File.ReadAllLines("C:\\Users\\Shweta Shinde\\Desktop\\TestingPrject\\test.csv");
+            buffer = System.IO.File.ReadAllLines("../../../test.csv");
             if (buffer.Length==0)
             {
                 Console.WriteLine("FILE IS EMPTY");

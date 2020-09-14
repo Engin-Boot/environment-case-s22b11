@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionsAnalyzer", "Condi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConditionsAnalyzerTest", "ConditionsAnalyzerTest\ConditionsAnalyzerTest.csproj", "{3A3D299F-40C9-4691-9D74-F389429B0E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringDeviceTest", "MonitoringDeviceTest\MonitoringDeviceTest.csproj", "{E550D4BF-93C5-42DA-ADBC-C3209B5D1247}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoringDeviceTest", "MonitoringDeviceTest\MonitoringDeviceTest.csproj", "{E550D4BF-93C5-42DA-ADBC-C3209B5D1247}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
