@@ -108,7 +108,7 @@ namespace MonitoringDevice
         {
             MonitoringDevice obj = new MonitoringDevice();
 
-            string path = "C:/Users/Aayush/Desktop/test.csv";
+            string path = "../../../test.csv";
 
             obj.ReadingData(path);
 
