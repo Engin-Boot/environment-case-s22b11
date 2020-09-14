@@ -10,7 +10,7 @@ namespace MonitoringDeviceTest
         public void WhenFileEmptyThenShowError()
         {
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-            var x = obj.ReadingData("../../../test.csv");
+            var x = obj.ReadingData("../../../../test.csv");
             Assert.True(x == 1);
         }
 
