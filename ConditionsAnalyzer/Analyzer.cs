@@ -10,9 +10,10 @@ namespace ConditionsAnalyzer
         public string breachType;
         public string message;
     }
+
     public class Analyzer
     {
-        private static System.Timers.Timer aTimer;
+        public static System.Timers.Timer aTimer;
         static IReporter reporter;
         static float temperatureLowerWarning;
         static float temperatureHigherWarning;
@@ -29,6 +30,7 @@ namespace ConditionsAnalyzer
             public float temperature;
             public float humidity;
         }
+
         public Analyzer(IReporter reporterobj)
         {
             reporter = reporterobj;
@@ -43,6 +45,7 @@ namespace ConditionsAnalyzer
             
 
         }
+
         public static Conditions getConditions(string Data)
         {
             Conditions condition = new Conditions();
@@ -51,6 +54,7 @@ namespace ConditionsAnalyzer
             condition.humidity = float.Parse(ConditionArray[1]);
             return condition;
         }
+
         public void Analyze(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel, float ErrorHighLevel, float ErrorLowLevel)
         {
             RangeResult rangeResult = new RangeResult();
@@ -62,6 +66,7 @@ namespace ConditionsAnalyzer
             }
             
         }
+       
         public static RangeResult CheckConditionsisInRange(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel)
         {
             RangeResult rangeResult = new RangeResult();
@@ -77,12 +82,14 @@ namespace ConditionsAnalyzer
             string message = GenerateAnAlertMessage(ConditionName, AlertType);
             return message;
         }
+        
         public static string GenerateAnAlertMessage(string ConditionName,string AlertType)
         {
             string message = $"{ConditionName} condition is at {AlertType} level";
             return message;   
         }
-        private static void SetTimer()
+        
+        public void SetTimer()
         {
             
             aTimer = new System.Timers.Timer(10000); 
@@ -91,19 +98,20 @@ namespace ConditionsAnalyzer
             aTimer.Enabled = true;
         }
 
-        private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        public static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             //Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
             //              e.SignalTime);
             reporter.sendMessage("Sender has not sent data since 30 mins");
         }
+       
         public static void Main(string[] args)
         {
             SMSReporter reporter = new SMSReporter();
             Analyzer analyzer = new Analyzer(reporter);
             Conditions conditions = new Conditions();
             string line;
-            SetTimer();
+            analyzer.SetTimer();
             while ((line = Console.ReadLine()) != null)
             {
                 aTimer.Stop();
