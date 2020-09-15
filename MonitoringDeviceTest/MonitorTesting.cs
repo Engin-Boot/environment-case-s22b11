@@ -119,20 +119,5 @@ namespace MonitoringDeviceTest
             Assert.True(x.Date == DateTime.Now.Date); 
 
         }
-
-        [Fact]
-        public void TestForSendingIncorrectData()
-        {
-            MonitoringDevice.MonitoringDevice.SetTimer();
-            var testFile = "../../../../MissingValue.csv";
-            var testFile1 = "../../../../testLogFileForSenderFunction.txt";
-            MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-            obj.ReadingData(testFile, testFile1);
-
-            var x = obj.SendingData(testFile1);
-            Assert.True((File.ReadAllText(testFile1) == ""));
-
-        }
-
     }
 }
