@@ -9,8 +9,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void TestForFileHavingContent()
         {
-            var testFile = "../../../../testFileForFileHavingContent.csv";
-            var testFile2 = "../../../../testLogFile.txt";
+            var testFile = "../../../../Test Files/testFileForFileHavingContent.csv";
+            var testFile2 = "../../../../Test Files/testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             var x = obj.ReadingData(testFile, testFile2);
             Assert.True(x == 1);
@@ -19,8 +19,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void TestForFileNotHavingContent()
         {
-            var testFile = "../../../../testFileForEmptyFile.csv";
-            var testFile2 = "../../../../testLogFile.txt";
+            var testFile = "../../../../Test Files/testFileForEmptyFile.csv";
+            var testFile2 = "../../../../Test Files/testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             var x = obj.ReadingData(testFile, testFile2);
             Assert.True(x == 0);
@@ -29,8 +29,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void testForWhenFileInCorrectFormat()
         {
-            var testFile = "../../../../CorrectFileFormat.csv";
-            var testFile1 = "../../../../testLogFile.txt";
+            var testFile = "../../../../Test Files/CorrectFileFormat.csv";
+            var testFile1 = "../../../../Test Files/testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             obj.ReadingData(testFile, testFile1);
             var x = obj.FormatChecker(testFile1);
@@ -40,8 +40,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void testForWhenFileinIncorrectFormat()
         {
-            var testFile = "../../../../IncorrectFormatFile.xlsx";
-            var testFile1 = "../../../../testLogFile.txt";
+            var testFile = "../../../../Test Files/IncorrectFormatFile.xlsx";
+            var testFile1 = "../../../../Test Files/testLogFile.txt";
 
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             obj.ReadingData(testFile, testFile1);
@@ -64,8 +64,8 @@ namespace MonitoringDeviceTest
         public void TestForMissingValueSkip()
         {
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-            var testFile = "../../../../MissingValue.csv";
-            var testFile1 = "../../../../testLogFile.txt";
+            var testFile = "../../../../Test Files/MissingValue.csv";
+            var testFile1 = "../../../../Test Files/testLogFile.txt";
 
             obj.ReadingData(testFile, testFile1);
 
@@ -97,7 +97,7 @@ namespace MonitoringDeviceTest
 
         public void TestToCheckWorkingOfLogFile()
         {
-            string testFile = "../../../../TestFileForLogFile.txt";
+            string testFile = "../../../../Test Files/TestFileForLogFile.txt";
 
             LogFileLibrary.LogFile obj = new LogFileLibrary.LogFile(testFile, "abcd");
             obj.WriteToLogFile();
@@ -109,7 +109,7 @@ namespace MonitoringDeviceTest
         public void TestForWhenSenderDoesNotSendData ()
         {
            
-            var logFile = "../../../../timeIssue.txt";
+            var logFile = "../../../../Test Files/timeIssue.txt";
 
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             MonitoringDevice.MonitoringDevice.SetTimer();

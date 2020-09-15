@@ -24,7 +24,7 @@ namespace MonitoringDevice
         
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            string file = "../../../timeIssue.txt"; //File for the timer
+            string file = "../../../Test Files/timeIssue.txt"; //File for the timer
             string message = string.Format("The Elapsed event was raised at {0:HH:mm:ss}", e.SignalTime);
             File.WriteAllText(file, message);
 
@@ -133,8 +133,8 @@ namespace MonitoringDevice
         {
             MonitoringDevice obj = new MonitoringDevice();
 
-            string path = "../../../test.csv";
-            string logFile = "../../../logfile.txt"; //file to log errors
+            string path = "../../../Test Files/test.csv";
+            string logFile = "../../../Test Files/logfile.txt"; //file to log errors
 
             obj.ReadingData(path, logFile);
 
