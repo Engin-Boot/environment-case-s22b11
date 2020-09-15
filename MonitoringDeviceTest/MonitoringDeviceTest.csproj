@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MonitoringDevice\MonitoringDevice.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestResults\" />
+  </ItemGroup>
+
 </Project>
