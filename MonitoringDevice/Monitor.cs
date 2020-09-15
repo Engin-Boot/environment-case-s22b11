@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Markup;
 using System.Timers;
 
 namespace MonitoringDevice
@@ -21,7 +15,7 @@ namespace MonitoringDevice
         private static void SetTimer()
         {
 
-            aTimer = new System.Timers.Timer(1500);
+            aTimer = new System.Timers.Timer(10000);
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -32,6 +26,7 @@ namespace MonitoringDevice
             Console.WriteLine("Machine did not send the message on time");
 
         }
+
         public int ReadingData(string filePath)
         {
             buffer = System.IO.File.ReadAllLines(filePath);
@@ -92,13 +87,15 @@ namespace MonitoringDevice
             {
                 aTimer.Start();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(8000);
 
                 if(!(buffer[i].Contains(',')))
                 Console.WriteLine(buffer[i]);
 
                 aTimer.Stop();
             }
+            Thread.Sleep(15000);
+            Console.WriteLine("30 78");
             
         }
 

@@ -13,7 +13,7 @@ namespace ConditionsAnalyzer
 
     public class Analyzer
     {
-        public static System.Timers.Timer aTimer;
+        public static Timer aTimer;
         static IReporter reporter;
         static float temperatureLowerWarning;
         static float temperatureHigherWarning;
@@ -39,7 +39,8 @@ namespace ConditionsAnalyzer
             temperatureLowerError = 0;
             temperatureHigherError = 40;
 
-            humidityLowerWarning = humidityLowerError = 0;
+            humidityLowerWarning = 4;
+            humidityLowerError = 0;
             humidityHigherWarning = 70;
             humidityHigherError = 90;
             
@@ -55,7 +56,7 @@ namespace ConditionsAnalyzer
             return condition;
         }
 
-        public void Analyze(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel, float ErrorHighLevel, float ErrorLowLevel)
+        public bool Analyze(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel, float ErrorHighLevel, float ErrorLowLevel)
         {
             RangeResult rangeResult = new RangeResult();
             rangeResult = CheckConditionsisInRange(value,ConditionName, WarningHighLevel, WarningLowLevel);
@@ -63,8 +64,9 @@ namespace ConditionsAnalyzer
             {
                 rangeResult.message = checkForBreachedCondition(value, ConditionName, ErrorHighLevel, ErrorLowLevel);
                 reporter.sendMessage(rangeResult.message);
+                return rangeResult.isInRange;
             }
-            
+            return rangeResult.isInRange;
         }
        
         public static RangeResult CheckConditionsisInRange(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel)
@@ -79,13 +81,13 @@ namespace ConditionsAnalyzer
         {
             bool ExtremeConditionCheck = (value < LowerextremeCondition || value > HigherExtremeCondition);
             string AlertType = ExtremeConditionCheck ? "ERROR" : "WARNING";
-            string message = GenerateAnAlertMessage(ConditionName, AlertType);
+            string message = GenerateAnAlertMessage(value, ConditionName, AlertType);
             return message;
         }
-        
-        public static string GenerateAnAlertMessage(string ConditionName,string AlertType)
+
+        public static string GenerateAnAlertMessage(float value, string ConditionName,string AlertType)
         {
-            string message = $"{ConditionName} condition is at {AlertType} level";
+            string message = $"{ConditionName} value = {value} is at {AlertType} level";
             return message;   
         }
         
@@ -112,12 +114,13 @@ namespace ConditionsAnalyzer
             Conditions conditions = new Conditions();
             string line;
             analyzer.SetTimer();
+            bool result;
             while ((line = Console.ReadLine()) != null)
             {
                 aTimer.Stop();
                 conditions = getConditions(line);
-                analyzer.Analyze(conditions.temperature,"Temperature",temperatureHigherWarning,temperatureLowerWarning,temperatureHigherError,temperatureLowerError);
-                analyzer.Analyze(conditions.humidity, "Humidity", humidityHigherWarning,humidityLowerWarning,humidityHigherError,humidityLowerError);
+                result = analyzer.Analyze(conditions.temperature,"Temperature",temperatureHigherWarning,temperatureLowerWarning,temperatureHigherError,temperatureLowerError);
+                result = analyzer.Analyze(conditions.humidity, "Humidity", humidityHigherWarning,humidityLowerWarning,humidityHigherError,humidityLowerError);
                 aTimer.Start();
             }
         }
