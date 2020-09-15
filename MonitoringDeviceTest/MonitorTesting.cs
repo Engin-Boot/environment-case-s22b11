@@ -9,8 +9,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void TestForFileHavingContent()
         {
-            var testFile = "C:/Users/Aayush/Desktop/testFileForFileHavingContent.csv";
-            var testFile2 = "C:/Users/Aayush/Desktop/testLogFile.txt";
+            var testFile = "../../../../testFileForFileHavingContent.csv";
+            var testFile2 = "../../../../testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             var x = obj.ReadingData(testFile, testFile2);
             Assert.True(x == 1);
@@ -19,8 +19,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void TestForFileNotHavingContent()
         {
-            var testFile = "C:/Users/Aayush/Desktop/testFileForEmptyFile.csv";
-            var testFile2 = "C:/Users/Aayush/Desktop/testLogFile.txt";
+            var testFile = "../../../../testFileForEmptyFile.csv";
+            var testFile2 = "../../../../testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             var x = obj.ReadingData(testFile, testFile2);
             Assert.True(x == 0);
@@ -29,8 +29,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void testForWhenFileInCorrectFormat()
         {
-            var testFile = "C:/Users/Aayush/Desktop/CorrectFileFormat.csv";
-            var testFile1 = "C:/Users/Aayush/Desktop/testLogFile.txt";
+            var testFile = "../../../../CorrectFileFormat.csv";
+            var testFile1 = "../../../../testLogFile.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             obj.ReadingData(testFile, testFile1);
             var x = obj.FormatChecker(testFile1);
@@ -40,8 +40,8 @@ namespace MonitoringDeviceTest
         [Fact]
         public void testForWhenFileinIncorrectFormat()
         {
-            var testFile = "C:/Users/Aayush/Desktop/IncorrectFormatFile.xlsx";
-            var testFile1 = "C:/Users/Aayush/Desktop/testLogFile.txt";
+            var testFile = "../../../../IncorrectFormatFile.xlsx";
+            var testFile1 = "../../../../testLogFile.txt";
 
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             obj.ReadingData(testFile, testFile1);
@@ -64,8 +64,8 @@ namespace MonitoringDeviceTest
         public void TestForMissingValueSkip()
         {
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
-            var testFile = "C:/Users/Aayush/Desktop/MissingValue.csv";
-            var testFile1 = "C:/Users/Aayush/Desktop/testLogFile.txt";
+            var testFile = "../../../../MissingValue.csv";
+            var testFile1 = "../../../../testLogFile.txt";
 
             obj.ReadingData(testFile, testFile1);
 
@@ -97,7 +97,7 @@ namespace MonitoringDeviceTest
 
         public void TestToCheckWorkingOfLogFile()
         {
-            string testFile = "C:/Users/Aayush/Desktop/TestFileForLogFile.txt";
+            string testFile = "../../../../TestFileForLogFile.txt";
 
             LogFileLibrary.LogFile obj = new LogFileLibrary.LogFile(testFile, "abcd");
             obj.WriteToLogFile();
@@ -109,7 +109,7 @@ namespace MonitoringDeviceTest
         public void TestForWhenSenderDoesNotSendData ()
         {
            
-            var logFile = "C:/Users/Aayush/Desktop/timeIssue.txt";
+            var logFile = "../../../../timeIssue.txt";
 
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             MonitoringDevice.MonitoringDevice.SetTimer();
@@ -124,8 +124,8 @@ namespace MonitoringDeviceTest
         public void TestForSendingIncorrectData()
         {
             MonitoringDevice.MonitoringDevice.SetTimer();
-            var testFile = "C:/Users/Aayush/Desktop/MissingValue.csv";
-            var testFile1 = "C:/Users/Aayush/Desktop/testLogFileForSenderFunction.txt";
+            var testFile = "../../../../MissingValue.csv";
+            var testFile1 = "../../../../testLogFileForSenderFunction.txt";
             MonitoringDevice.MonitoringDevice obj = new MonitoringDevice.MonitoringDevice();
             obj.ReadingData(testFile, testFile1);
 
