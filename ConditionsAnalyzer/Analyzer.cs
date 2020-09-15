@@ -6,122 +6,112 @@ namespace ConditionsAnalyzer
 
     public struct RangeResult
     {
-        public bool isInRange;
-        public string breachType;
-        public string message;
+        public bool IsInRange;
+        public string Message;
     }
 
     public class Analyzer
     {
-        public static Timer aTimer;
-        static IReporter reporter;
-        static float temperatureLowerWarning;
-        static float temperatureHigherWarning;
-        static float temperatureLowerError;
-        static float temperatureHigherError;
+        private static Timer _aTimer;
+        private static IReporter _reporter;
+        private static float _temperatureLowerWarning;
+        private static float _temperatureHigherWarning;
+        private static float _temperatureLowerError;
+        private static float _temperatureHigherError;
 
-        static float humidityLowerWarning;
-        static float humidityHigherWarning;
-        static float humidityLowerError;
-        static float humidityHigherError;
+        private static float _humidityLowerWarning;
+        private static float _humidityHigherWarning;
+        private static float _humidityLowerError;
+        private static float _humidityHigherError;
 
         public struct Conditions
         {
-            public float temperature;
-            public float humidity;
+            public float Temperature;
+            public float Humidity;
         }
 
-        public Analyzer(IReporter reporterobj)
+        public Analyzer(IReporter reporter)
         {
-            reporter = reporterobj;
-            temperatureLowerWarning = 4;
-            temperatureHigherWarning = 37;
-            temperatureLowerError = 0;
-            temperatureHigherError = 40;
+            _reporter = reporter;
+            _temperatureLowerWarning = 4;
+            _temperatureHigherWarning = 37;
+            _temperatureLowerError = 0;
+            _temperatureHigherError = 40;
 
-            humidityLowerWarning = 4;
-            humidityLowerError = 0;
-            humidityHigherWarning = 70;
-            humidityHigherError = 90;
+            _humidityLowerWarning = 4;
+            _humidityLowerError = 0;
+            _humidityHigherWarning = 70;
+            _humidityHigherError = 90;
             
 
         }
 
-        public static Conditions getConditions(string Data)
+        public static Conditions GetConditions(string data)
         {
-            Conditions condition = new Conditions();
-            string[] ConditionArray = Data.Split(' ');
-            condition.temperature = float.Parse(ConditionArray[0]);
-            condition.humidity = float.Parse(ConditionArray[1]);
+            var condition = new Conditions();
+            var conditionArray = data.Split(' ');
+            condition.Temperature = float.Parse(conditionArray[0]);
+            condition.Humidity = float.Parse(conditionArray[1]);
             return condition;
         }
 
-        public bool Analyze(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel, float ErrorHighLevel, float ErrorLowLevel)
+        public bool Analyze(float value, string conditionName, float warningHighLevel, float warningLowLevel, float errorHighLevel, float errorLowLevel)
         {
-            RangeResult rangeResult = new RangeResult();
-            rangeResult = CheckConditionsisInRange(value,ConditionName, WarningHighLevel, WarningLowLevel);
-            if(!rangeResult.isInRange)
-            {
-                rangeResult.message = checkForBreachedCondition(value, ConditionName, ErrorHighLevel, ErrorLowLevel);
-                reporter.sendMessage(rangeResult.message);
-                return rangeResult.isInRange;
-            }
-            return rangeResult.isInRange;
+            var rangeResult = CheckConditionIsInRange(value, warningHighLevel, warningLowLevel);
+            if (rangeResult.IsInRange) return true;
+            rangeResult.Message = CheckForBreachedCondition(value, conditionName, errorHighLevel, errorLowLevel);
+            _reporter.SendMessage(rangeResult.Message);
+            return false;
         }
        
-        public static RangeResult CheckConditionsisInRange(float value, string ConditionName, float WarningHighLevel, float WarningLowLevel)
+        public static RangeResult CheckConditionIsInRange(float value, float warningHighLevel, float warningLowLevel)
         {
-            RangeResult rangeResult = new RangeResult();
-            rangeResult.isInRange = true;
-            rangeResult.isInRange = !(value < WarningLowLevel || value > WarningHighLevel);
+            var rangeResult = new RangeResult {IsInRange = true};
+            rangeResult.IsInRange = !(value < warningLowLevel || value > warningHighLevel);
             return rangeResult;
         }
       
-        public static string checkForBreachedCondition(float value, string ConditionName, float HigherExtremeCondition, float LowerextremeCondition)
+        public static string CheckForBreachedCondition(float value, string conditionName, float higherExtremeCondition, float lowerExtremeCondition)
         {
-            bool ExtremeConditionCheck = (value < LowerextremeCondition || value > HigherExtremeCondition);
-            string AlertType = ExtremeConditionCheck ? "ERROR" : "WARNING";
-            string message = GenerateAnAlertMessage(value, ConditionName, AlertType);
+            var extremeConditionCheck = (value < lowerExtremeCondition || value > higherExtremeCondition);
+            var alertType = extremeConditionCheck ? "ERROR" : "WARNING";
+            var message = GenerateAnAlertMessage(value, conditionName, alertType);
             return message;
         }
 
-        public static string GenerateAnAlertMessage(float value, string ConditionName,string AlertType)
+        private static string GenerateAnAlertMessage(float value, string conditionName,string alertType)
         {
-            string message = $"{ConditionName} value = {value} is at {AlertType} level";
+            var message = $"{conditionName} value = {value} is at {alertType} level at {DateTime.Now}";
             return message;   
         }
         
-        public void SetTimer()
-        {
-            
-            aTimer = new System.Timers.Timer(10000); 
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
+        public void SetTimer(int interval)
+        { 
+            _aTimer = new Timer(interval); 
+            _aTimer.Elapsed += OnTimedEvent;
+            _aTimer.AutoReset = true;
+            _aTimer.Enabled = true;
         }
 
-        public static void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            //Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
-            //              e.SignalTime);
-            reporter.sendMessage("Sender has not sent data since 30 mins");
+            _reporter.SendMessage($"Sender has not sent any data since {DateTime.Now.AddMinutes(-30)}");
         }
        
-        public static void Main(string[] args)
+        public static void Main()
         {
-            SMSReporter reporter = new SMSReporter();
-            Analyzer analyzer = new Analyzer(reporter);
-            Conditions conditions = new Conditions();
+            var reporter = new SMSReporter();
+            var analyzer = new Analyzer(reporter);
             string line;
-            analyzer.SetTimer();
-            bool result;
+            analyzer.SetTimer(10000);
+          
             while ((line = Console.ReadLine()) != null)
             {
-                aTimer.Stop();
-                conditions = getConditions(line);
-                result = analyzer.Analyze(conditions.temperature,"Temperature",temperatureHigherWarning,temperatureLowerWarning,temperatureHigherError,temperatureLowerError);
-                result = analyzer.Analyze(conditions.humidity, "Humidity", humidityHigherWarning,humidityLowerWarning,humidityHigherError,humidityLowerError);
-                aTimer.Start();
+                _aTimer.Stop();
+                var conditions = GetConditions(line);
+                analyzer.Analyze(conditions.Temperature,"Temperature",_temperatureHigherWarning,_temperatureLowerWarning,_temperatureHigherError,_temperatureLowerError);
+                analyzer.Analyze(conditions.Humidity, "Humidity", _humidityHigherWarning,_humidityLowerWarning,_humidityHigherError,_humidityLowerError);
+                _aTimer.Start();
             }
         }
     }
