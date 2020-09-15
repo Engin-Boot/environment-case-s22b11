@@ -7,7 +7,7 @@ namespace ConditionsAnalyzer
         void SendMessage(string message);
     }
 
-    public class SMSReporter : IReporter
+    public class SmsReporter : IReporter
     {
         public void SendMessage(string message)
         {

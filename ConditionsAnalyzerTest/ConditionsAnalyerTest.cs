@@ -88,7 +88,7 @@ namespace ConditionsAnalyzerTest
         [Fact]
         public void TestAnalyzeFunctionIfConditionIsNotBreached()
         {
-            IReporter reporter = new SMSReporter();
+            IReporter reporter = new SmsReporter();
             var analyzer = new Analyzer(reporter);
             var result = analyzer.Analyze(60, "Humidity", 70, 0, 90, 0);
             Assert.True(result);
@@ -105,7 +105,7 @@ namespace ConditionsAnalyzerTest
         [Fact]
         public void TestAnalyzeFunctionIfConditionIsBreachedUsingSmsReporter()
         {
-            IReporter reporter = new SMSReporter();
+            IReporter reporter = new SmsReporter();
             var analyzer = new Analyzer(reporter);
             var result = analyzer.Analyze(39, "Temperature", 37, 4, 40, 0);
             Assert.False(result);

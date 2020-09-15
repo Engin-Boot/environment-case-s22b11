@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Timers;
 
+
 namespace ConditionsAnalyzer
 {
 
@@ -85,7 +86,7 @@ namespace ConditionsAnalyzer
             return message;   
         }
         
-        public void SetTimer(int interval)
+        static void SetTimer(int interval)
         { 
             _aTimer = new Timer(interval); 
             _aTimer.Elapsed += OnTimedEvent;
@@ -100,10 +101,10 @@ namespace ConditionsAnalyzer
        
         public static void Main()
         {
-            var reporter = new SMSReporter();
+            var reporter = new SmsReporter();
             var analyzer = new Analyzer(reporter);
             string line;
-            analyzer.SetTimer(10000);
+            SetTimer(10000);
           
             while ((line = Console.ReadLine()) != null)
             {
