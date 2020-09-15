@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Markup;
 using System.Timers;
 
 namespace MonitoringDevice
 {
     
-    public class MonitoringDevice
+        public class MonitoringDevice
     {
         private static System.Timers.Timer aTimer;
-        public static string[] buffer;
+        public  static string[] buffer;
         string[] temp;
 
-        private static void SetTimer()
+        public static void SetTimer()
         {
 
             aTimer = new System.Timers.Timer(1000);
@@ -26,30 +21,7 @@ namespace MonitoringDevice
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
         }
-        public void WriteToLogFile(string logFilePath,string logMessage)
-        {
-           
-            FileStream outStream;
-            StreamWriter writer;
-            TextWriter oldOut = Console.Out;
-            try
-            {
-                outStream = new FileStream(logFilePath, FileMode.OpenOrCreate, FileAccess.Write);
-                writer = new StreamWriter(outStream);
-            }
-
-            catch (Exception a)
-            {
-                Console.WriteLine(a.Message);
-                return;
-            }
-
-            Console.SetOut(writer);
-            Console.WriteLine(logMessage);
-            Console.SetOut(oldOut);
-            writer.Close();
-            outStream.Close();
-        }
+        
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             string file = "C:/Users/Aayush/Desktop/timeIssue.txt"; //File for the timer
@@ -58,24 +30,29 @@ namespace MonitoringDevice
 
         }
 
-        public int ReadingData(string filePath,string logFile)
+        public int ReadingData(string filePath, string logFile)
         {
+            
             try
             {
                 buffer = System.IO.File.ReadAllLines(filePath);
-                
+
                 if (buffer.Length <= 1)
                 {
-                    WriteToLogFile(logFile,"EMPTY FILE");
+                    LogFileLibrary.LogFile obj = new LogFileLibrary.LogFile(logFile, "EMPTY FILE");
+                    obj.WriteToLogFile();
+
                     return 0;
+                    
                 }
-                
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                WriteToLogFile(logFile, "FILE NOT FOUND");
+                LogFileLibrary.LogFile obj = new LogFileLibrary.LogFile(logFile, "FILE NOT FOUND"); 
+                obj.WriteToLogFile();
                 Console.WriteLine(e.Message);
-                
+
             }
             return 1;
 
@@ -83,39 +60,40 @@ namespace MonitoringDevice
 
         public int FormatChecker(string logFile)
         {
-            for(int i=1;i<buffer.Length;i++)
+            for (int i = 1; i < buffer.Length; i++)
             {
-               
+
                 if (!(buffer[i].Contains(',')))
                 {
-                    WriteToLogFile(logFile,"DEVICE MALFUNCTION");
+                    LogFileLibrary.LogFile obj = new LogFileLibrary.LogFile(logFile, "DEVICE MALFUNCTION");
+                    obj.WriteToLogFile();
                     return 0;
                 }
             }
-            
+
             return 1;
         }
         public int ProcessingData()
         {
             int flag = 0;
-            for(int i=1; i<buffer.Length; i++)  
-            {   
+            for (int i = 1; i < buffer.Length; i++)
+            {
 
                 temp = buffer[i].Split(',');
 
                 var missingValueIndicator = HandleMissingValues(temp);
 
-                if ( missingValueIndicator == 1)
+                if (missingValueIndicator == 1)
                 {
-                    
+
                     flag = 1;
                     continue;
                 }
 
                 buffer[i] = temp[0] + " " + temp[1];
-                
+
             }
-            
+
             return flag;
         }
         public int HandleMissingValues(string[] tempBuf)
@@ -130,26 +108,26 @@ namespace MonitoringDevice
         public DateTime SendingData(string log)
         {
             DateTime LastModified;
-            for(int i=1;i<buffer.Length;i++)
+            for (int i = 1; i < buffer.Length; i++)
             {
                 aTimer.Start();
 
                 Thread.Sleep(1200);
 
-                if(!(buffer[i].Contains(',')))
-                Console.WriteLine(buffer[i]);
+                if (!(buffer[i].Contains(','))) 
+                    Console.WriteLine(buffer[i]);
 
                 aTimer.Stop();
             }
-            
+
             LastModified = System.IO.File.GetLastWriteTime(log);
-            
- 
+
+
             return LastModified;
-            
+
         }
 
-        
+
 
         static void Main(string[] args)
         {
@@ -158,17 +136,21 @@ namespace MonitoringDevice
             string path = "C:/Users/Aayush/Desktop/test.csv";
             string logFile = "C:/Users/Aayush/Desktop/logfile.txt"; //file to log errors
 
-            obj.ReadingData(path,logFile);
+            obj.ReadingData(path, logFile);
 
-            int x = obj.FormatChecker(logFile);
+            obj.FormatChecker(logFile);
 
-            if (x == 1)
-            {
-                SetTimer();
-                obj.ProcessingData();
-                obj.SendingData(logFile);
-                
-            }
+            SetTimer();
+
+            obj.ProcessingData();
+
+            obj.SendingData(logFile);
+
+            
+            
         }
     }
+  
+    
 }
+
